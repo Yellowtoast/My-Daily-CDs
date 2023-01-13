@@ -1,0 +1,12 @@
+import '../../../../core/network_handling/network_handling.dart';
+import '../../../../core/values/constants.dart';
+
+abstract class RequestDTO {
+  Map<String, dynamic> get dataMap;
+  Map<String, dynamic> get apiInfoMap;
+  RequestType get requestType;
+  String get apiMethod;
+  String get url;
+  static const restApiKey = Constants.REST_API_KEY;
+  static const dataFormat = 'json';
+}
