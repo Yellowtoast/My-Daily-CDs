@@ -1,6 +1,9 @@
 import 'package:daily_cd_player/core/theme/colors.dart';
 import 'package:daily_cd_player/core/theme/size.dart';
+import 'package:daily_cd_player/helpers/url_launcher.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 
 class ArchiveView extends StatelessWidget {
   const ArchiveView({Key? key}) : super(key: key);
@@ -14,11 +17,11 @@ class ArchiveView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -53,9 +56,9 @@ class ArchiveView extends StatelessWidget {
                         children: [
                           Image.asset(
                             'assets/images/cd.png',
-                            height: 47,
+                            height: 43,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 8,
                           ),
                           Expanded(
@@ -65,7 +68,7 @@ class ArchiveView extends StatelessWidget {
                               children: [
                                 Expanded(
                                     child: Container(
-                                  margin: EdgeInsets.only(right: 20),
+                                  margin: const EdgeInsets.only(right: 20),
                                   decoration: BoxDecoration(
                                       border: Border(
                                           bottom: BorderSide(
@@ -97,9 +100,24 @@ class ArchiveView extends StatelessWidget {
                                           ),
                                         ],
                                       )),
+                                      GestureDetector(
+                                        onTap: () {},
+                                        child: Container(
+                                          color: Colors.transparent,
+                                          padding: EdgeInsets.only(
+                                              left: 12,
+                                              top: 10,
+                                              bottom: 15,
+                                              right: 3),
+                                          child: Image.asset(
+                                            'assets/images/headphone.png',
+                                            height: 29,
+                                          ),
+                                        ),
+                                      ),
                                       Container(
                                         padding: EdgeInsets.only(
-                                            left: 15, top: 10, bottom: 10),
+                                            left: 9, top: 10, bottom: 10),
                                         child: Image.asset(
                                           'assets/icons/archive/delete.png',
                                           height: 30,

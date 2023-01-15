@@ -9,13 +9,13 @@ import 'core/theme/text_theme.dart';
 void main() {
   runApp(
     const ProviderScope(
-      child: MyApp(),
+      child: MyDailyCDsApp(),
     ),
   );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyDailyCDsApp extends StatelessWidget {
+  const MyDailyCDsApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: Routes.HOME,
       routes: MyPages.pages,
+      debugShowCheckedModeBanner: false,
     );
   }
 }

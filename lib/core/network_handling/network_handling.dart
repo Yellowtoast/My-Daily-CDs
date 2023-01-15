@@ -71,15 +71,6 @@ class Api {
             break;
           }
       }
-      // if (result != null) {
-      //   if (result.data['data'] != null) {
-      //     return result.data['data'] as Map<String, dynamic>;
-      //   } else {
-      //     return result.data;
-      //   }
-      // } else {
-      //   throw NoDataException();
-      // }
 
       if (result.data != null) {
         return result.data as Map<String, dynamic>;
@@ -146,12 +137,8 @@ class ErrorInterceptors extends Interceptor {
         if (kDebugMode) {
           print(err);
         }
-        if (!err.requestOptions.queryParameters['query']
-            .contains(RegExp(r'[a-z|A-Z|0-9|ㄱ-ㅎ|ㅏ-ㅣ|가-힣|ᆞ|ᆢ]'))) {
-          throw WrongTextException(err.requestOptions);
-        } else {
-          throw NoInternetConnectionException(err.requestOptions);
-        }
+
+        throw NoInternetConnectionException(err.requestOptions);
     }
 
     return handler.next(err);

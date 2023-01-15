@@ -4,4 +4,5 @@ abstract class Routes {
   static const HOME = '/home';
   static const RECOMMEND = '/recommend';
   static const ARCHIVE = '/archive';
+  static const TODAY_TEST = '/test';
 }

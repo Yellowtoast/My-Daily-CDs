@@ -264,9 +264,11 @@ TextTheme myWhiteTextTheme = const TextTheme(
 TextTheme myEnglishLikeTextTheme = TextTheme(
   headline1: TextStyle(
     debugLabel: 'myEnglishLikeTextTheme headline1',
-    fontFamily: GoogleFonts.inter().fontFamily,
+    fontFamily: GoogleFonts.inter(
+      fontWeight: FontWeight.w600,
+    ).fontFamily,
     fontSize: 28.0,
-    fontWeight: FontWeight.w700,
+    // fontWeight: FontWeight.w600,
     textBaseline: TextBaseline.alphabetic,
   ),
   headline2: const TextStyle(

@@ -18,12 +18,17 @@ class ApiCallDTO {
       this.header});
 
   factory ApiCallDTO.fromDTO(RequestDTO requestDTO) {
-    Map<String, dynamic> header = Map.from(defaultHeader);
+    var header = Map<String, dynamic>.from(defaultHeader);
+    var apiInfoMap = {
+      'method': requestDTO.apiMethod,
+      'api_key': RequestDTO.restApiKey,
+      'format': RequestDTO.dataFormat,
+    };
 
     return ApiCallDTO._(
         url: requestDTO.url,
         header: header,
-        data: {...requestDTO.apiInfoMap, ...requestDTO.dataMap},
+        data: {...apiInfoMap, ...requestDTO.dataMap},
         requestType: requestDTO.requestType);
   }
 }
