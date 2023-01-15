@@ -1,10 +1,9 @@
 // ignore_for_file: invalid_annotation_target
 
 import 'package:daily_cd_player/data/model/dto/response_dto/artist_response_dto.dart';
-import 'package:daily_cd_player/data/model/pagination_meta_response.dart';
+import 'package:daily_cd_player/data/model/pagination_response.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'abstract_response_dto.dart';
-import 'converter/datetime_converter.dart';
 part 'music_response_dto.freezed.dart';
 part 'music_response_dto.g.dart';
 
@@ -15,7 +14,9 @@ class MusicListResponseDTO with _$MusicListResponseDTO implements ResponseDTO {
           {@JsonKey(name: 'albums', readValue: _readAlbumValue)
           @Default(<MusicResponseDTO>[])
               List<MusicResponseDTO> list,
-          @JsonKey(name: '@attr')
+          @JsonKey(
+            name: 'meta',
+          )
               required PaginaitonMetaResponse paginationMeta}) =
       _MusicListResponseDTO;
 
@@ -24,6 +25,7 @@ class MusicListResponseDTO with _$MusicListResponseDTO implements ResponseDTO {
 }
 
 Object? _readAlbumValue(Map json, String key) {
+  json['meta'] = json['albums']['@attr'];
   return json['albums'] = json['albums']['album'];
 }
 

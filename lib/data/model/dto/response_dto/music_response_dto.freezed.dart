@@ -22,7 +22,7 @@ MusicListResponseDTO _$MusicListResponseDTOFromJson(Map<String, dynamic> json) {
 mixin _$MusicListResponseDTO {
   @JsonKey(name: 'albums', readValue: _readAlbumValue)
   List<MusicResponseDTO> get list => throw _privateConstructorUsedError;
-  @JsonKey(name: '@attr')
+  @JsonKey(name: 'meta')
   PaginaitonMetaResponse get paginationMeta =>
       throw _privateConstructorUsedError;
 
@@ -41,7 +41,7 @@ abstract class $MusicListResponseDTOCopyWith<$Res> {
   $Res call(
       {@JsonKey(name: 'albums', readValue: _readAlbumValue)
           List<MusicResponseDTO> list,
-      @JsonKey(name: '@attr')
+      @JsonKey(name: 'meta')
           PaginaitonMetaResponse paginationMeta});
 
   $PaginaitonMetaResponseCopyWith<$Res> get paginationMeta;
@@ -97,7 +97,7 @@ abstract class _$$_MusicListResponseDTOCopyWith<$Res>
   $Res call(
       {@JsonKey(name: 'albums', readValue: _readAlbumValue)
           List<MusicResponseDTO> list,
-      @JsonKey(name: '@attr')
+      @JsonKey(name: 'meta')
           PaginaitonMetaResponse paginationMeta});
 
   @override
@@ -138,7 +138,7 @@ class _$_MusicListResponseDTO implements _MusicListResponseDTO {
   _$_MusicListResponseDTO(
       {@JsonKey(name: 'albums', readValue: _readAlbumValue)
           final List<MusicResponseDTO> list = const <MusicResponseDTO>[],
-      @JsonKey(name: '@attr')
+      @JsonKey(name: 'meta')
           required this.paginationMeta})
       : _list = list;
 
@@ -155,7 +155,7 @@ class _$_MusicListResponseDTO implements _MusicListResponseDTO {
   }
 
   @override
-  @JsonKey(name: '@attr')
+  @JsonKey(name: 'meta')
   final PaginaitonMetaResponse paginationMeta;
 
   @override
@@ -197,7 +197,7 @@ abstract class _MusicListResponseDTO implements MusicListResponseDTO {
   factory _MusicListResponseDTO(
           {@JsonKey(name: 'albums', readValue: _readAlbumValue)
               final List<MusicResponseDTO> list,
-          @JsonKey(name: '@attr')
+          @JsonKey(name: 'meta')
               required final PaginaitonMetaResponse paginationMeta}) =
       _$_MusicListResponseDTO;
 
@@ -208,7 +208,7 @@ abstract class _MusicListResponseDTO implements MusicListResponseDTO {
   @JsonKey(name: 'albums', readValue: _readAlbumValue)
   List<MusicResponseDTO> get list;
   @override
-  @JsonKey(name: '@attr')
+  @JsonKey(name: 'meta')
   PaginaitonMetaResponse get paginationMeta;
   @override
   @JsonKey(ignore: true)

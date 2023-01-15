@@ -13,15 +13,15 @@ _$_MusicListResponseDTO _$$_MusicListResponseDTOFromJson(
               ?.map((e) => MusicResponseDTO.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const <MusicResponseDTO>[],
-      paginationMeta: PaginaitonMetaResponse.fromJson(
-          json['@attr'] as Map<String, dynamic>),
+      paginationMeta:
+          PaginaitonMetaResponse.fromJson(json['meta'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$_MusicListResponseDTOToJson(
         _$_MusicListResponseDTO instance) =>
     <String, dynamic>{
       'albums': instance.list.map((e) => e.toJson()).toList(),
-      '@attr': instance.paginationMeta.toJson(),
+      'meta': instance.paginationMeta.toJson(),
     };
 
 _$_MusicResponseDTO _$$_MusicResponseDTOFromJson(Map<String, dynamic> json) =>
