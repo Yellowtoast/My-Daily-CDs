@@ -3,10 +3,11 @@ import '../../../../core/values/api_url.dart';
 import '../../../../helpers/pagination/paginaiton_filter_model.dart';
 import '../../../enums/enums.dart';
 import 'abstract_request_dto.dart';
+import 'pagination_request_dto.dart';
 
 class MusicListRequestDTO implements RequestDTO {
   late final int _page;
-  late final int _size;
+  late final int _limit;
   final List<MusicTag> _musicTags;
 
   @override
@@ -19,22 +20,22 @@ class MusicListRequestDTO implements RequestDTO {
   Map<String, dynamic> get dataMap => {
         'tag': _musicTags.map((e) => e.tagCode).join(' '),
         'page': _page,
-        'limit': _size,
+        'limit': _limit,
       };
 
   @override
   RequestType get requestType => RequestType.GET;
 
-  MusicListRequestDTO(this._page, this._size, this._musicTags);
+  MusicListRequestDTO(this._page, this._limit, this._musicTags);
 
   factory MusicListRequestDTO.fromDTO(
       {required List<ColorTest> selectedColors,
-      required PaginationFilter paginationFilter}) {
+      required PaginationRequest paginationRequest}) {
     List<MusicTag> musicTags = selectedColors.getMusicTags();
 
     return MusicListRequestDTO(
-      paginationFilter.page,
-      paginationFilter.listSize,
+      paginationRequest.page,
+      paginationRequest.limit,
       musicTags,
     );
   }
