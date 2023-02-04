@@ -1,76 +1,107 @@
 import 'package:daily_cd_player/core/error_handling/error_message_object.dart';
 import 'package:daily_cd_player/data/enums/enums.dart';
-import 'package:daily_cd_player/data/model/dto/response_dto/music_response_dto.dart';
-import 'package:daily_cd_player/data/service/remote_service/music_api.dart';
-import 'package:daily_cd_player/helpers/pagination/paginaiton_filter_model.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:daily_cd_player/data/model/pagination_response.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../model/dto/request_dto/pagination_request_dto.dart';
 import '../../repository/music_repository.dart';
 
-final recommendViewModelProvider = Provider((ref) => RecommendViewModel());
+final recommendViewModelProvider =
+    StateNotifierProvider<RecommendViewModel, PaginationBase>((ref) {
+  final repository = ref.watch(musicRepositoryProvider);
+  final viewModelProvider = RecommendViewModel(repository as MusicRepository);
+  return viewModelProvider;
+});
 
-class RecommendViewModel {
-  Future<MusicListResponseDTO> getMusicList(WidgetRef ref) async {
-    var getMusicListEither = await ref
-        .read(musicRepositoryProvider)
-        .fetchMusicList(
-            paginationFilter: PaginationFilter(page: 1, listSize: 10),
-            selectedColors: [ColorTest.blue, ColorTest.green, ColorTest.navy]);
-
-    return getMusicListEither.fold(
-      (failure) => throw ErrorObject.mapFailureToErrorMessage(failure: failure),
-      (musicList) => musicList,
-    );
+class RecommendViewModel extends StateNotifier<PaginationBase> {
+  final MusicRepository _repository;
+  RecommendViewModel(this._repository) : super(PaginationLoading()) {
+    _init();
+    // paginate();
   }
 
-  final navigatorKey = GlobalKey<NavigatorState>();
-
-  // void showDialogFlash({String title = '', String? content}) {
-  //   navigatorKey.currentContext!.showFlashDialog(
-  //       constraints: const BoxConstraints(maxWidth: 300),
-  //       title: Text(title, style: const TextStyle(fontSize: 16)),
-  //       content: Text(content!, style: const TextStyle(fontSize: 14)),
-  //       negativeActionBuilder: (context, controller, _) {
-  //         return TextButton(
-  //           onPressed: () => controller.dismiss(),
-  //           child: const Text('CANCEL'),
-  //         );
-  //       },
-  //       positiveActionBuilder: (context, controller, _) {
-  //         return TextButton(
-  //             onPressed: () {
-  //               controller.dismiss();
-  //             },
-  //             child: const Text('OK'));
-  //       });
-  // }
-
-  void checkInternetConnectivity(WidgetRef ref) {
-    showDialog(
-      context: navigatorKey.currentContext!,
-      builder: (context) => Builder(builder: (context) {
-        return Container(
-          height: 100,
-          width: 100,
-          color: Colors.amber,
-        );
-      }),
-    );
+  _init() {
+    _checkTestForTodayAvaliable();
   }
-}
 
-final navigatorKey = GlobalKey<NavigatorState>();
-void checkInternetConnectivity(WidgetRef ref) {
-  showDialog(
-    context: navigatorKey.currentContext!,
-    builder: (context) => Builder(builder: (context) {
-      return Container(
-        height: 100,
-        width: 100,
-        color: Colors.amber,
+  _checkTestForTodayAvaliable() {
+    // 로컬 스토리지에서 오늘
+  }
+
+  paginate({
+    int fetchLimit = 20,
+    bool fetchMore = false,
+    bool forceRefetch = false,
+    List<ColorTest> selectedColors = const [
+      ColorTest.blue,
+      ColorTest.green,
+      ColorTest.navy
+    ],
+  }) async {
+    if (state is PaginationResponse && !forceRefetch) {
+      final pState = state as PaginationResponse;
+
+      if (!pState.meta.hasMore) {
+        return;
+      }
+    }
+
+    final isLoading = state is PaginationLoading;
+    final isRefetching = state is PaginationRefetching;
+    final isFetchingMore = state is PaginationFetchingMore;
+
+    if (fetchMore && (isLoading || isRefetching || isFetchingMore)) {
+      return;
+    }
+
+    var paginationRequest = PaginationRequest(limit: fetchLimit);
+
+    if (fetchMore) {
+      final pState = state as PaginationResponse;
+
+      state = PaginationFetchingMore(
+        list: pState.list,
+        meta: pState.meta,
       );
-    }),
-  );
+
+      paginationRequest = paginationRequest.copyWith(
+        page: pState.meta.currentPage + 1,
+      );
+    } else {
+      if (state is PaginationResponse && !forceRefetch) {
+        final pState = state as PaginationResponse;
+        state = PaginationRefetching(
+          list: pState.list,
+          meta: pState.meta,
+        );
+      } else {
+        state = PaginationLoading();
+      }
+    }
+
+    final responseEither = await _repository.fetchMusicList(
+      paginationRequest: paginationRequest,
+      selectedColors: selectedColors,
+    );
+
+    if (state is PaginationFetchingMore) {
+      final pState = state as PaginationFetchingMore;
+
+      responseEither.fold(
+        (failure) => state = PaginationError(
+          errorObject: ErrorObject.mapFailureToErrorMessage(failure: failure),
+        ),
+        (response) => state = response.copyWith(
+          list: [...pState.list, ...response.list],
+        ),
+      );
+    } else {
+      state = responseEither.fold(
+        (failure) => state = PaginationError(
+          errorObject: ErrorObject.mapFailureToErrorMessage(failure: failure),
+        ),
+        (response) => response,
+      );
+    }
+  }
 }
